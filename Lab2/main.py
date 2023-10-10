@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
@@ -83,7 +84,8 @@ sns.FacetGrid(df,
                           "sepal.length").add_legend()
 plt.show()
 
-
+silhouette_avg = silhouette_score(df.to_numpy(), clusters)
+print("Средний коэффициент силуэта:", silhouette_avg)
 
 
 # setosa = 1
