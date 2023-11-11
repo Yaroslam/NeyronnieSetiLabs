@@ -10,22 +10,22 @@ k_2_true = 3
 b_true = 4
 
 y = k_1_true * x ** 2 + k_2_true * x + b_true + noise
-k_1 = tf.Variable(0.0)
-k_2 = tf.Variable(0.0)
-b = tf.Variable(0.0)
+k_1 = tf.Variable(0.3)
+k_2 = tf.Variable(0.4)
+b = tf.Variable(0.5)
 f = k_1 * x ** 2 + k_2 * x + b
 loss = tf.reduce_mean(tf.square(y - f))
-EPOCHS = 500
+EPOCHS = 5
 learning_rate = 0.0002
 
 for n in range(EPOCHS):
     with tf.GradientTape() as t:
         f = k_1 * x**2 + k_2 * x + b
         loss = tf.reduce_mean(tf.square(y - f))
-        print(loss)
+        print(f, " loss")
 
     dk_1, dk_2, db = t.gradient(loss, [k_1, k_2, b])
-
+    print(dk_1, dk_2, db)
     k_1.assign_sub(learning_rate * dk_1)
     k_2.assign_sub(learning_rate * dk_2)
     b.assign_sub(learning_rate * db)
