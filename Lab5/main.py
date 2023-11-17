@@ -42,13 +42,14 @@ if __name__ == '__main__':
 
     # print labels
     print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
-
+    learning_rate = 1e-2
     net = Net()
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=0.002, momentum=0.9)
+    # optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-    for epoch in range(15):  # loop over the dataset multiple times
+    optimizer = torch.optim.SGD(net.parameters(), lr=0.001)
+    for epoch in range(2):  # loop over the dataset multiple times
 
         running_loss = 0.0
         for i, data in enumerate(trainloader, 0):
@@ -66,6 +67,7 @@ if __name__ == '__main__':
 
             # print statistics
             running_loss += loss.item()
+            print(i)
             if i % 2000 == 1999:  # print every 2000 mini-batches
                 print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.3f}')
                 running_loss = 0.0
@@ -93,7 +95,10 @@ if __name__ == '__main__':
     total = 0
     # since we're not training, we don't need to calculate the gradients for our outputs
     with torch.no_grad():
+        j = 0
         for data in testloader:
+            print(j)
+            j+=1
             images, labels = data
             # calculate outputs by running images through the network
             outputs = net(images)
