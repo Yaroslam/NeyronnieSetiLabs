@@ -42,13 +42,12 @@ if __name__ == '__main__':
 
     # print labels
     print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
-    learning_rate = 1e-2
+
     net = Net()
 
     criterion = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+    optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-    optimizer = torch.optim.SGD(net.parameters(), lr=0.001)
     for epoch in range(2):  # loop over the dataset multiple times
 
         running_loss = 0.0
@@ -95,10 +94,7 @@ if __name__ == '__main__':
     total = 0
     # since we're not training, we don't need to calculate the gradients for our outputs
     with torch.no_grad():
-        j = 0
         for data in testloader:
-            print(j)
-            j+=1
             images, labels = data
             # calculate outputs by running images through the network
             outputs = net(images)
@@ -114,18 +110,18 @@ if __name__ == '__main__':
     total_pred = {classname: 0 for classname in classes}
 
     # again no gradients needed
-    # with torch.no_grad():
-    #     for data in testloader:
-    #         images, labels = data
-    #         outputs = net(images)
-    #         _, predictions = torch.max(outputs, 1)
-    #         # collect the correct predictions for each class
-    #         for label, prediction in zip(labels, predictions):
-    #             if label == prediction:
-    #                 correct_pred[classes[label]] += 1
-    #             total_pred[classes[label]] += 1
-    #
-    # # print accuracy for each class
-    # for classname, correct_count in correct_pred.items():
-    #     accuracy = 100 * float(correct_count) / total_pred[classname]
-    #     print(f'Accuracy for class: {classname:5s} is {accuracy:.1f} %')
+    with torch.no_grad():
+        for data in testloader:
+            images, labels = data
+            outputs = net(images)
+            _, predictions = torch.max(outputs, 1)
+            # collect the correct predictions for each class
+            for label, prediction in zip(labels, predictions):
+                if label == prediction:
+                    correct_pred[classes[label]] += 1
+                total_pred[classes[label]] += 1
+
+    # print accuracy for each class
+    for classname, correct_count in correct_pred.items():
+        accuracy = 100 * float(correct_count) / total_pred[classname]
+        print(f'Accuracy for class: {classname:5s} is {accuracy:.1f} %')

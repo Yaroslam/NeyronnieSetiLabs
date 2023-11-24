@@ -12,7 +12,7 @@ from net import VGG16_NET
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 BATCH_SIZE=64
-num_epochs=5
+num_epochs=2
 lr=1e-4
 class_size=10
 
@@ -45,7 +45,6 @@ for images, _ in train_loader:
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = VGG16_NET()
-model = model.to(device=device)
 load_model = True
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr= lr)
@@ -54,8 +53,6 @@ for epoch in range(num_epochs):  # I decided to train the model for 50 epochs
     loss_var = 0
 
     for idx, (images, labels) in enumerate(train_loader):
-        images = images.to(device=device)
-        labels = labels.to(device=device)
         ## Forward Pass
         optimizer.zero_grad()
         scores = model(images)
@@ -73,8 +70,6 @@ for epoch in range(num_epochs):  # I decided to train the model for 50 epochs
         correct = 0
         samples = 0
         for idx, (images, labels) in enumerate(val_loader):
-            images = images.to(device=device)
-            labels = labels.to(device=device)
             outputs = model(images)
             _, preds = outputs.max(1)
             correct += (preds == labels).sum()
@@ -91,8 +86,6 @@ test_loader = DataLoader(test, batch_size=8, shuffle=False)
 correct = 0
 samples = 0
 for idx, (images, labels) in enumerate(test_loader):
-    images = images.to(device='cpu')
-    labels = labels.to(device='cpu')
     outputs = model(images)
     _, preds = outputs.max(1)
     correct += (preds == labels).sum()
