@@ -8,11 +8,8 @@ from Lab7.net import MyModel
 from Lab7.step import OneStep
 
 path_to_file = tf.keras.utils.get_file('shakespeare.txt', 'https://storage.googleapis.com/download.tensorflow.org/data/shakespeare.txt')
-# Read, then decode for py2 compat.
 text = open(path_to_file, 'rb').read().decode(encoding='utf-8')
-# length of text is the number of characters in it
 print(f'Length of text: {len(text)} characters')
-# The unique characters in the file
 vocab = sorted(set(text))
 print(f'{len(vocab)} unique characters')
 example_texts = ['abcdefg', 'xyz']
@@ -61,10 +58,6 @@ for input_example, target_example in dataset.take(1):
 # Batch size
 BATCH_SIZE = 64
 
-# Buffer size to shuffle the dataset
-# (TF data is designed to work with possibly infinite sequences,
-# so it doesn't attempt to shuffle the entire sequence in memory. Instead,
-# it maintains a buffer in which it shuffles elements).
 BUFFER_SIZE = 10000
 
 dataset = (
